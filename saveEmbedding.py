@@ -89,11 +89,11 @@ if __name__ == "__main__":
   gf_paths = configparser.ConfigParser()
   gf_paths.read("exp_paths.ini")
 
-  vocab = data_chemprot.load_vocabulary(gf_paths["DEFAULT"]["ALLDATA_PATH"])
+  vocab = data_chemprot.load_vocabulary(gf_paths["DEFAULT"]["DL_ALLDATA_PATH"])
   word2index, embed, index2word = data_chemprot.load_bioWE_vectors(vocab)
 
   embedding_for_given_index = (word2index, embed)
-  ft = open('shorten_bc6/pubpmc_gf.pickle', 'wb')
+  ft = open('shorten_bc6/pubpmc_gfdl.pickle', 'wb')
   pickle.dump(embedding_for_given_index, ft)
   ft.close()
 

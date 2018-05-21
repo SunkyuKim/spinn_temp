@@ -6,8 +6,8 @@ logits_symbol_list = []
 logits_entire_list = []
 logits_symbol_label=0
 logits_entire_label=0
-ckptnum = 4500
-for i in range(8):
+ckptnum = 9000
+for i in range(10):
     num = i+1
 
     if not os.path.isfile("logs/DL_train4_%s/logits_entire-%s"%(num, ckptnum)):

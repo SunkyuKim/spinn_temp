@@ -108,7 +108,7 @@ def load_vocabulary(data_root):
   Raises:
     ValueError: If chemprot data files cannot be found.
   """
-  glob_pattern = os.path.join(data_root, "*")
+  glob_pattern = os.path.join(data_root, "*.tsv")
   file_names = glob.glob(glob_pattern)
   if not file_names:
     raise ValueError(
