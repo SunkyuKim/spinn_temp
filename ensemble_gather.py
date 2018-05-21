@@ -7,12 +7,12 @@ logits_entire_list = []
 logits_symbol_label=0
 logits_entire_label=0
 ckptnum = 4500
-for i in range(8):
+for i in range(10):
     num = i+1
 
     if not os.path.isfile("logs/DL_train4_%s/logits_entire-%s"%(num, ckptnum)):
     #if True:
-        os.system("CUDA_VISIBLE_DEVICES= python spinn_chemprot.py --genefusion_expstr=DL_train4 --logdir=logs/DL_train4_%s --test_bool --ckptnum=%s"%(num, ckptnum))
+        os.system("CUDA_VISIBLE_DEVICES= python spinn_chemprot.py --genefusion_expstr=DL_train4 --logdir=logs/DL_train4_gfdl_%s --test_bool --ckptnum=%s"%(num, ckptnum))
 
     fr = open("logs/DL_train4_%s/logits_entire-%s"%(num, ckptnum))
     logits_entire_list.append(np.array(eval(fr.readline())))

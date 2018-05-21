@@ -588,8 +588,8 @@ def train_spinn(embed, train_data, dev_data, config):
           accuracy = tfe.metrics.Accuracy()
 
         batch_idx += 1
-        bbs = sunkyu.BeaverBotSender()
-      bbs.send(config.logdir, "\n".join(bbs_strs))
+        #bbs = sunkyu.BeaverBotSender()
+      #bbs.send(config.logdir, "\n".join(bbs_strs))
 
     print("Saving last step " + str(global_step))
     with tf.device("cpu:0"):
@@ -671,8 +671,9 @@ def test_spinn(embed, test_data, config, entire=True):
     fw_logits.close()
 
     if len(config.ckptnum)==0: # send testset email when no restore
-        bbs = sunkyu.BeaverBotSender()
-        bbs.send(config.logdir, sendstr)
+        pass
+        #bbs = sunkyu.BeaverBotSender()
+        #bbs.send(config.logdir, sendstr)
     return test_f1
 
 def main(_):
@@ -704,10 +705,11 @@ def main_genefusion(_):
 
   config = FLAGS
   # Load embedding vectors.
-  vocab = data_chemprot.load_vocabulary(gf_paths["DEFAULT"]["ALLDATA_PATH"])
+  #vocab = data_chemprot.load_vocabulary(gf_paths["DEFAULT"]["ALLDATA_PATH"])
+  vocab = data_chemprot.load_vocabulary(gf_paths["DEFAULT"]["DL_ALLDATA_PATH"])
 
-  ft1 = open('shorten_bc6/pubpmc_gf.pickle', 'rb')
-  #ft1 = open('shorten_bc6/pubpmc_gfdl.pickle', 'rb')
+  #ft1 = open('shorten_bc6/pubpmc_gf.pickle', 'rb')
+  ft1 = open('shorten_bc6/pubpmc_gfdl.pickle', 'rb')
   embedding_for_given_index1 = pickle.load(ft1)
   ft1.close()
   word2index, embed = embedding_for_given_index1
