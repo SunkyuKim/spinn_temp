@@ -733,10 +733,17 @@ def main_genefusion(_):
       entire_f1 = test_spinn(embed, test_data, config, entire=True)
 
   else:
-      train_data = data_chemprot.ChemprotData(
-          #os.path.join("chemprot-data", "train_whole_SNLIformat"),#training_SNLIformat
-          gf_paths["%s"%FLAGS.genefusion_expstr]["TRAIN_PATH"],
-          word2index, sentence_len_limit=FLAGS.sentence_len_limit)
+      if FLAGS.ensemble_num >= 0: # When ensemble.
+          train_path = gf_paths["%s"%FLAGS.genefusion_expstr]["TRAIN_PATH"].replace("ENSEMBLENUM", str(FLAGS.ensemble_num))
+          train_data = data_chemprot.ChemprotData(
+              #os.path.join("chemprot-data", "train_whole_SNLIformat"),#training_SNLIformat
+              train_path,
+              word2index, sentence_len_limit=FLAGS.sentence_len_limit)
+      else:   # No ensemble.
+          train_data = data_chemprot.ChemprotData(
+              #os.path.join("chemprot-data", "train_whole_SNLIformat"),#training_SNLIformat
+              gf_paths["%s"%FLAGS.genefusion_expstr]["TRAIN_PATH"],
+              word2index, sentence_len_limit=FLAGS.sentence_len_limit)
       dev_data = data_chemprot.ChemprotData(
           gf_paths["%s"%FLAGS.genefusion_expstr]["DEVELOP_PATH"],
           #os.path.join("chemprot-data", "test_SNLIformat"),#develop_SNLIformat
@@ -812,6 +819,8 @@ if __name__ == "__main__":
                       help="restore ckptnum")
   parser.add_argument("--test_bool", action="store_true", dest="test_bool",
                       help="test_bool")
+  parser.add_argument("--ensemble_num", type=int, default=-1,
+                      help="the number of ensemble. -1 means no ensemble.")
 
   FLAGS, unparsed = parser.parse_known_args()
 

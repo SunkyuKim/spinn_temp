@@ -97,7 +97,8 @@ def putEnding(tree, st, alist):
 #f1 = open("../chemprot-data/developPosit_chem", "r")
 #f1 = open("genefusion-data/non-DL version/test_180404_2048_onlysymbols_lim_result_pre.tsv", "r", encoding='utf-8')
 #f1_files = glob.glob("genefusion-data/non-DL version/*.tsv")
-f1_files = glob.glob("genefusion-data/DL version/*.tsv")
+#f1_files = glob.glob("genefusion-data/DL version/*.tsv")
+f1_files = glob.glob("genefusion-data/DL_uniqueid/*.tsv")
 for f1_path in f1_files:
     print(f1_path)
     f1 = open(f1_path, "r", encoding='utf-8')
@@ -124,8 +125,10 @@ for f1_path in f1_files:
             parseString(splitted[10], 0, -1, tree) # old format
         except:
             print("error..")
+            print(splitted[10])
             continue
 
+        #parseString(splitted[10], 0, -1, tree) # old format
         for key in tree:#arrange for SNLIformat
             tmpContent = tree[key].getContent()
             if ' ' not in tmpContent:
