@@ -2,23 +2,24 @@ import os
 import numpy as np
 from sklearn import metrics
 
+expstr = "DL_train4_ensemble_oversampling"
 logits_symbol_list = []
 logits_entire_list = []
 logits_symbol_label=0
 logits_entire_label=0
-ckptnum = 9000
+ckptnum = 4500
 for i in range(10):
     num = i+1
 
-    if not os.path.isfile("logs/DL_train4_%s/logits_entire-%s"%(num, ckptnum)):
-    #if True:
-        os.system("CUDA_VISIBLE_DEVICES= python spinn_chemprot.py --genefusion_expstr=DL_train4 --logdir=logs/DL_train4_%s --test_bool --ckptnum=%s"%(num, ckptnum))
+    #if not os.path.isfile("logs/%s_%s/logits_entire-%s"%(expstr, num, ckptnum)):
+    if True:
+        os.system("CUDA_VISIBLE_DEVICES= python spinn_chemprot.py --genefusion_expstr=%s --logdir=logs/%s_%s --test_bool --ckptnum=%s"%(expstr, expstr, num, ckptnum))
 
-    fr = open("logs/DL_train4_%s/logits_entire-%s"%(num, ckptnum))
+    fr = open("logs/%s_%s/logits_entire-%s"%(expstr, num, ckptnum))
     logits_entire_list.append(np.array(eval(fr.readline())))
     logits_entire_label = np.array(eval(fr.readline()))
     fr.close()
-    fr = open("logs/DL_train4_%s/logits_symbol-%s"%(num, ckptnum))
+    fr = open("logs/%s_%s/logits_symbol-%s"%(expstr, num, ckptnum))
     logits_symbol_list.append(np.array(eval(fr.readline())))
     logits_symbol_label = np.array(eval(fr.readline()))
     fr.close()

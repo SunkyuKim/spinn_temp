@@ -9,7 +9,7 @@ def foo(x):
     expnum = x+1
 
     cmdstr = \
-    "CUDA_VISIBLE_DEVICES= python spinn_chemprot.py --genefusion_expstr={expstr} --logdir=logs/{expstr}_{expnum} --epochs=25 --ensemble_num={expnum} && "\
+    "CUDA_VISIBLE_DEVICES= python spinn_chemprot.py --genefusion_expstr={expstr} --logdir=logs/{expstr}_{expnum} --epochs=50 --ensemble_num={expnum} && "\
     "CUDA_VISIBLE_DEVICES= python spinn_chemprot.py --genefusion_expstr={expstr} --logdir=logs/{expstr}_{expnum} --test_bool".format(expstr=expstr, expnum=expnum)
     print(cmdstr)
     os.system(cmdstr)
