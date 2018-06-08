@@ -1,0 +1,10 @@
+# : comments
+
+# ignore folders
+genefusion-data/
+__pycache__/
+shorten_bc6/*
+logs/*
+
+
+sunkyu_account.ini
