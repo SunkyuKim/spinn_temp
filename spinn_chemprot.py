@@ -588,15 +588,15 @@ def train_spinn(embed, train_data, dev_data, config):
           accuracy = tfe.metrics.Accuracy()
 
         batch_idx += 1
-        bbs = sunkyu.BeaverBotSender()
-      bbs.send(config.logdir, "\n".join(bbs_strs))
+        #bbs = sunkyu.BeaverBotSender()
+      #bbs.send(config.logdir, "\n".join(bbs_strs))
 
     print("Saving last step " + str(global_step))
     with tf.device("cpu:0"):
       tfe.save_network_checkpoint(model, os.path.join(config.logdir, "ckpt"), global_step=global_step)
 
 
-def test_spinn(embed, test_data, config, entire=True):
+def test_spinn(embed, test_data, config, mode='entire'):
   """Train a SPINN model.
 
   Args:
@@ -656,14 +656,20 @@ def test_spinn(embed, test_data, config, entire=True):
         0, test_frac_correct.result().numpy() * 100.0))
     print(test_f1)
 
-    if entire:
+    if mode=='entire':
         fw_logits = open(config.logdir+"/logits_entire-%s"%(str(config.ckptnum)), "w")
         sendstr = "%s\nTEST_ENTIRE : %s\n"%(
                 FLAGS.genefusion_expstr, test_f1)
-    else:
+    elif mode == 'symbol':
         fw_logits = open(config.logdir+"/logits_symbol-%s"%(str(config.ckptnum)), "w")
         sendstr = "%s\nTEST_SYMBOL : %s\n"%(
                 FLAGS.genefusion_expstr, test_f1)
+    elif mode == 'nonsymbol':
+        fw_logits = open(config.logdir+"/logits_nonsymbol-%s"%(str(config.ckptnum)), "w")
+        sendstr = "%s\nTEST_NONSYMBOL : %s\n"%(
+                FLAGS.genefusion_expstr, test_f1)
+    else:
+        pass
 
     fw_logits.write(",".join([str(v) for v in test_logits])+"\n")
     fw_logits.write(",".join([str(v) for v in test_labels])+"\n")
@@ -671,8 +677,9 @@ def test_spinn(embed, test_data, config, entire=True):
     fw_logits.close()
 
     if len(config.ckptnum)==0: # send testset email when no restore
-        bbs = sunkyu.BeaverBotSender()
-        bbs.send(config.logdir, sendstr)
+        pass
+        #bbs = sunkyu.BeaverBotSender()
+        #bbs.send(config.logdir, sendstr)
     return test_f1
 
 def main(_):
@@ -723,13 +730,22 @@ def main_genefusion(_):
           gf_paths["%s"%FLAGS.genefusion_expstr]["TEST_PATH_SYMBOL"],
           #os.path.join("chemprot-data", "test_SNLIformat"),
           word2index, sentence_len_limit=FLAGS.sentence_len_limit)
-      symbol_f1 = test_spinn(embed, test_data, config, entire=False)
+      symbol_f1 = test_spinn(embed, test_data, config, mode='symbol')
 
       test_data = data_chemprot.ChemprotData(
           gf_paths["%s"%FLAGS.genefusion_expstr]["TEST_PATH_ENTIRE"],
           #os.path.join("chemprot-data", "test_SNLIformat"),
           word2index, sentence_len_limit=FLAGS.sentence_len_limit)
-      entire_f1 = test_spinn(embed, test_data, config, entire=True)
+      entire_f1 = test_spinn(embed, test_data, config, mode='entire')
+      
+      test_data = data_chemprot.ChemprotData(
+          gf_paths["%s"%FLAGS.genefusion_expstr]["TEST_PATH_NONSYMBOL"],
+          #os.path.join("chemprot-data", "test_SNLIformat"),
+          word2index, sentence_len_limit=FLAGS.sentence_len_limit)
+      nonsymbol_f1 = test_spinn(embed, test_data, config, mode='nonsymbol')
+
+      print("symbol : {:.2}, nonsymbol : {:.2}, entire : {:.2}".format(symbol_f1, nonsymbol_f1, entire_f1))
+
 
   else:
       if FLAGS.ensemble_num >= 0: # When ensemble.

@@ -13,6 +13,11 @@ class BeaverBotSender(object):
         self.sender = 'beaver4276@daum.net'
         self.receivers = ['sunkyu4276@gmail.com']
 
+        fr = open("sunkyu_account.ini")
+        self.id = fr.readline().strip().split()[1]
+        self.pw = fr.readline().strip().split()[1]
+        fr.close()
+
     def send(self, subject, message):
         try_count = 0
         while(True):
@@ -31,7 +36,7 @@ class BeaverBotSender(object):
     def __send(self, subject, message):
         server = smtplib.SMTP_SSL('smtp.daum.net', port=465)
         server.ehlo()
-        server.login('beaver4276',"daum_tjsrb")
+        server.login(self.id, self.pw)
         subject = "[BeaverBot] " + subject
         msg = MIMEText(message)
         msg['Subject'] = subject
