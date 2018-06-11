@@ -2,13 +2,15 @@ import os
 import pandas as pd
 
 
-#trainfile_code = "4"
-trainfile_code = "4-1"
+trainfile_code = "4"
+#trainfile_code = "4-1"
 
-mainfile = open("genefusion-data/snli-dl-version/processed_train" + trainfile_code + "_unique_id_180521_lim_result_pre.tsv",encoding='utf8').readlines()
+#mainfile = open("genefusion-data/snli-dl-version/processed_train" + trainfile_code + "_unique_id_180521_lim_result_pre.tsv",encoding='utf8').readlines()
+mainfile = open("genefusion-data/snli-dl-version/dl_train" + trainfile_code + "_unique_id_lim_result_pre.tsv",encoding='utf8').readlines()
 mainfile_dict = dict()
 
-for l in open("genefusion-data/DL_uniqueid/[id]processed_train" + trainfile_code + "_unique_id_180521_lim_result_pre.tsv", encoding='utf8'):
+#for l in open("genefusion-data/DL_uniqueid/[id]processed_train" + trainfile_code + "_unique_id_180521_lim_result_pre.tsv", encoding='utf8'):
+for l in open("genefusion-data/DL_uniqueid/[id]dl_train" + trainfile_code + "_unique_id_lim_result_pre.tsv", encoding='utf8'):
     tokens = l.strip().split("\t")
     mainfile_dict[tokens[0]] = int(tokens[1])
 
